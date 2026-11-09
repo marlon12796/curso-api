@@ -1,0 +1,10 @@
+.git
+.github
+.vscode
+.idea
+target
+*.log
+infra/terraform/.terraform
+infra/terraform/*.tfstate*
+infra/terraform/*.tfvars
+!infra/terraform/terraform.tfvars.example

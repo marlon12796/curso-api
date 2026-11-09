@@ -1,0 +1,5 @@
+aws_region   = "us-east-1"
+project_name = "curso-api"
+instance_type = "t3.micro"
+key_name     = "TU_KEY_PAIR"
+admin_cidr   = "TU_IP_PUBLICA/32"

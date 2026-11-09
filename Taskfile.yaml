@@ -1,0 +1,62 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "Inicia el servidor Spring Boot en modo desarrollo (equivalente a pnpm run dev)"
+    cmds:
+      - cmd: cmd /c mvnw.cmd spring-boot:run
+
+  dev:
+    desc: "Inicia la aplicación Spring Boot"
+    cmds:
+      - task: default
+
+  build:
+    desc: "Compila el proyecto y genera el archivo .jar de producción"
+    cmds:
+      - cmd: cmd /c mvnw.cmd clean package -DskipTests
+
+  test:
+    desc: "Ejecuta las pruebas unitarias con JUnit"
+    cmds:
+      - cmd: cmd /c mvnw.cmd test
+
+  test:courses:
+    desc: "Ejecuta los tests del contexto courses"
+    cmds:
+      - cmd: cmd /c mvnw.cmd -Dtest=CourseTest,CreateCourseHandlerTest test
+
+  format:
+    desc: "Aplica Google Java Format con Spotless"
+    cmds:
+      - cmd: cmd /c mvnw.cmd spotless:apply
+
+  format:check:
+    desc: "Comprueba que el código cumple Google Java Format"
+    cmds:
+      - cmd: cmd /c mvnw.cmd spotless:check
+
+  lint:
+    desc: "Ejecuta Checkstyle"
+    cmds:
+      - cmd: cmd /c mvnw.cmd checkstyle:check
+
+  clean:
+    desc: "Limpia la carpeta target/ de compilación"
+    cmds:
+      - cmd: cmd /c mvnw.cmd clean
+
+  db:up:
+    desc: "Levanta el contenedor de PostgreSQL con Docker/Podman"
+    cmds:
+      - cmd: podman compose up -d 2>nul || docker compose up -d
+
+  db:down:
+    desc: "Detiene el contenedor de PostgreSQL"
+    cmds:
+      - cmd: podman compose down 2>nul || docker compose down
+
+  db:logs:
+    desc: "Muestra los logs de PostgreSQL"
+    cmds:
+      - cmd: podman compose logs -f postgres 2>nul || docker compose logs -f postgres
