@@ -1,15 +1,11 @@
 output "parameter_names" {
-  description = "Nombres de los parametros SSM creados"
+  description = "Nombres de los parametros SSM existentes"
 
-  value = {
-    for key, parameter in aws_ssm_parameter.app : key => parameter.name
-  }
+  value = local.parameter_names
 }
 
 output "parameter_arns" {
-  description = "ARN de los parametros SSM creados"
+  description = "ARN de los parametros SSM existentes"
 
-  value = {
-    for key, parameter in aws_ssm_parameter.app : key => parameter.arn
-  }
+  value = local.parameter_arns
 }

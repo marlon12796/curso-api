@@ -1,45 +1,25 @@
+data "aws_caller_identity" "current" {}
+
+data "aws_partition" "current" {}
+
+data "aws_region" "current" {}
+
 locals {
-  db_parameters = {
-    DB_URL = {
-      description = "URL de PostgreSQL para ${var.project_name}"
-      type        = "String"
-      value       = var.db_url
-    }
-
-    DB_USERNAME = {
-      description = "Usuario de PostgreSQL para ${var.project_name}"
-      type        = "String"
-      value       = var.db_username
-    }
-
-    DB_PASSWORD = {
-      description = "Password de PostgreSQL para ${var.project_name}"
-      type        = "SecureString"
-      value       = var.db_password
-    }
-
-    JWT_SECRET = {
-      description = "Secreto JWT para ${var.project_name}"
-      type        = "SecureString"
-      value       = var.jwt_secret
-    }
-
-    JWT_EXPIRATION_MS = {
-      description = "Expiración del JWT para ${var.project_name}"
-      type        = "String"
-      value       = var.jwt_expiration_ms
-    }
+  parameter_names = {
+    DB_URL            = "/${var.project_name}/prod/DB_URL"
+    DB_USERNAME       = "/${var.project_name}/prod/DB_USERNAME"
+    DB_PASSWORD       = "/${var.project_name}/prod/DB_PASSWORD"
+    JWT_SECRET        = "/${var.project_name}/prod/JWT_SECRET"
+    JWT_EXPIRATION_MS = "/${var.project_name}/prod/JWT_EXPIRATION_MS"
   }
-}
 
-resource "aws_ssm_parameter" "app" {
-  for_each    = local.db_parameters
-  name        = "/${var.project_name}/prod/${each.key}"
-  type        = each.value.type
-  description = each.value.description
-  value       = each.value.value
-  tags = {
-    Project     = var.project_name
-    Environment = "prod"
+  parameter_arns = {
+    for key, name in local.parameter_names : key => format(
+      "arn:%s:ssm:%s:%s:parameter%s",
+      data.aws_partition.current.partition,
+      data.aws_region.current.region,
+      data.aws_caller_identity.current.account_id,
+      name
+    )
   }
 }

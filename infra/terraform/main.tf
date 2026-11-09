@@ -6,10 +6,9 @@ data "aws_ssm_parameter" "amazon_linux_2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
-resource "random_password" "db" {
-  length  = 32
-  special = false
-}
+data "aws_caller_identity" "current" {}
+
+data "aws_partition" "current" {}
 
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
@@ -134,19 +133,15 @@ module "ecr" {
 module "parameter_store" {
   source = "./modules/parameter-store"
 
-  project_name      = var.project_name
-  db_url            = var.db_url
-  db_username       = var.db_username
-  db_password       = random_password.db.result
-  jwt_secret        = var.jwt_secret
-  jwt_expiration_ms = var.jwt_expiration_ms
+  project_name = var.project_name
 }
 
 module "ec2_ssm_role" {
   source = "./modules/ec2-ssm-role"
 
-  name           = var.project_name
-  parameter_arns = module.parameter_store.parameter_arns
+  name               = var.project_name
+  parameter_arns     = module.parameter_store.parameter_arns
+  ecr_repository_arn = module.ecr.repository_arn
 
   tags = {
     Project = var.project_name

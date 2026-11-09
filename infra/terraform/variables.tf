@@ -32,25 +32,4 @@ variable "app_port" {
   default     = 3050
 }
 
-variable "db_url" {
-  description = "URL JDBC de PostgreSQL"
-  type        = string
-}
-
-variable "db_username" {
-  description = "Usuario de PostgreSQL"
-  type        = string
-}
-
-variable "jwt_secret" {
-  description = "Secreto utilizado para firmar los tokens JWT"
-  type        = string
-  sensitive   = true
-}
-
-variable "jwt_expiration_ms" {
-  description = "Duracion del token JWT en milisegundos"
-  type        = string
-  default     = "3600000"
-}
 

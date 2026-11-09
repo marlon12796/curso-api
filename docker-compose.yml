@@ -2,32 +2,28 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: curso-api-postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: curso_db
-      POSTGRES_USER: postgres
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d curso_db"]
+      test: ["CMD-SHELL", "pg_isready -U $${DB_USERNAME:-postgres} -d curso_db"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${ECR_REPOSITORY_URL:-697961194138.dkr.ecr.us-east-1.amazonaws.com/curso-api}:${IMAGE_TAG:-latest}
     container_name: curso-api
-    restart: always
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/curso_db
+      DB_URL: ${DB_URL:-jdbc:postgresql://postgres:5432/curso_db}
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
       JWT_SECRET: ${JWT_SECRET:-mi_clave_local_de_desarrollo_de_32_caracteres_minimo}

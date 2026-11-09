@@ -8,6 +8,11 @@ variable "parameter_arns" {
   type        = map(string)
 }
 
+variable "ecr_repository_arn" {
+  description = "ARN del repositorio ECR que EC2 puede descargar"
+  type        = string
+}
+
 variable "tags" {
   description = "Tags adicionales de los recursos IAM"
   type        = map(string)
