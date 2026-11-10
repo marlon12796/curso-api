@@ -2,13 +2,20 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-data "aws_ssm_parameter" "amazon_linux_2023" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
-}
-
 data "aws_caller_identity" "current" {}
 
 data "aws_partition" "current" {}
+
+module "cloudflare" {
+  source = "./modules/cloudflare"
+
+  account_id = var.cloudflare_account_id
+  zone_id    = var.cloudflare_zone_id
+  hostname   = var.cloudflare_hostname
+  service    = "http://api:3050"
+
+  name = "${var.project_name}-production"
+}
 
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
@@ -74,14 +81,6 @@ resource "aws_security_group" "app" {
     cidr_blocks = [var.admin_cidr]
   }
 
-  ingress {
-    description = "Puerto temporal de la API"
-    from_port   = var.app_port
-    to_port     = var.app_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -99,19 +98,20 @@ module "ec2" {
   source = "./modules/ec2"
 
   name                   = "${var.project_name}-ec2"
-  ami                    = data.aws_ssm_parameter.amazon_linux_2023.value
+  ami                    = var.ami_id
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.app.id]
   key_name               = var.key_name
   iam_instance_profile   = module.ec2_ssm_role.instance_profile_name
   user_data = templatefile("${path.module}/modules/ec2/user-data.sh", {
-    aws_region               = var.aws_region
-    db_url_parameter         = module.parameter_store.parameter_names["DB_URL"]
-    db_username_parameter    = module.parameter_store.parameter_names["DB_USERNAME"]
-    db_password_parameter    = module.parameter_store.parameter_names["DB_PASSWORD"]
-    jwt_secret_parameter     = module.parameter_store.parameter_names["JWT_SECRET"]
-    jwt_expiration_parameter = module.parameter_store.parameter_names["JWT_EXPIRATION_MS"]
+    aws_region                  = var.aws_region
+    db_url_parameter            = module.parameter_store.parameter_names["DB_URL"]
+    db_username_parameter       = module.parameter_store.parameter_names["DB_USERNAME"]
+    db_password_parameter       = module.parameter_store.parameter_names["DB_PASSWORD"]
+    jwt_secret_parameter        = module.parameter_store.parameter_names["JWT_SECRET"]
+    jwt_expiration_parameter    = module.parameter_store.parameter_names["JWT_EXPIRATION_MS"]
+    cloudflare_tunnel_parameter = module.parameter_store.parameter_names["CLOUDFLARE_TUNNEL_TOKEN"]
   })
 
   tags = {

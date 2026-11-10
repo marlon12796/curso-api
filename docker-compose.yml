@@ -28,8 +28,16 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
       JWT_SECRET: ${JWT_SECRET:-mi_clave_local_de_desarrollo_de_32_caracteres_minimo}
       JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-3600000}
-    ports:
-      - "3050:3050"
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: curso-api-cloudflared
+    restart: unless-stopped
+    profiles:
+      - production
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      api:
+        condition: service_started
 
 volumes:
   postgres_data:

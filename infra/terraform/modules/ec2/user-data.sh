@@ -5,6 +5,7 @@ umask 077
 APP_DIR="/opt/curso-api"
 ENV_FILE="$${APP_DIR}/.env.prod"
 TEMP_ENV_FILE="$${APP_DIR}/.env.prod.tmp"
+TUNNEL_TOKEN_FILE="$${APP_DIR}/cloudflare-tunnel-token"
 AWS_REGION="${aws_region}"
 COMPOSE_VERSION="v5.7.0"
 COMPOSE_PLUGIN_DIR="/usr/libexec/docker/cli-plugins"
@@ -14,6 +15,7 @@ DB_USERNAME_PARAMETER="${db_username_parameter}"
 DB_PASSWORD_PARAMETER="${db_password_parameter}"
 JWT_SECRET_PARAMETER="${jwt_secret_parameter}"
 JWT_EXPIRATION_PARAMETER="${jwt_expiration_parameter}"
+CLOUDFLARE_TUNNEL_PARAMETER="${cloudflare_tunnel_parameter}"
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -66,6 +68,10 @@ DB_USERNAME="$$(get_ssm_parameter "$${DB_USERNAME_PARAMETER}")"
 DB_PASSWORD="$$(get_ssm_parameter "$${DB_PASSWORD_PARAMETER}")"
 JWT_SECRET="$$(get_ssm_parameter "$${JWT_SECRET_PARAMETER}")"
 JWT_EXPIRATION_MS="$$(get_ssm_parameter "$${JWT_EXPIRATION_PARAMETER}")"
+CLOUDFLARE_TUNNEL_TOKEN="$$(get_ssm_parameter "$${CLOUDFLARE_TUNNEL_PARAMETER}")"
+
+printf '%s' "$${CLOUDFLARE_TUNNEL_TOKEN}" > "$${TUNNEL_TOKEN_FILE}"
+chmod 600 "$${TUNNEL_TOKEN_FILE}"
 
 log "Generando archivo de entorno..."
 
@@ -75,6 +81,7 @@ DB_USERNAME="$${DB_USERNAME}"
 DB_PASSWORD="$${DB_PASSWORD}"
 JWT_SECRET="$${JWT_SECRET}"
 JWT_EXPIRATION_MS="$${JWT_EXPIRATION_MS}"
+CLOUDFLARE_TUNNEL_TOKEN="$${CLOUDFLARE_TUNNEL_TOKEN}"
 EOF
 
 test -s "$${TEMP_ENV_FILE}"
@@ -82,7 +89,7 @@ chown ec2-user:ec2-user "$${TEMP_ENV_FILE}"
 chmod 600 "$${TEMP_ENV_FILE}"
 mv "$${TEMP_ENV_FILE}" "$${ENV_FILE}"
 
-unset DB_URL DB_USERNAME DB_PASSWORD JWT_SECRET JWT_EXPIRATION_MS
+unset DB_URL DB_USERNAME DB_PASSWORD JWT_SECRET JWT_EXPIRATION_MS CLOUDFLARE_TUNNEL_TOKEN
 rm -f "$${TEMP_ENV_FILE}"
 
 log "Bootstrap completado."

@@ -16,6 +16,11 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
+variable "ami_id" {
+  description = "AMI aprobada para la EC2"
+  type        = string
+}
+
 variable "key_name" {
   description = "Nombre del Key Pair existente para conectarse por SSH"
   type        = string
@@ -30,6 +35,21 @@ variable "app_port" {
   description = "Puerto temporal de la API para la práctica inicial"
   type        = number
   default     = 3050
+}
+
+variable "cloudflare_account_id" {
+  description = "ID de la cuenta de Cloudflare"
+  type        = string
+}
+
+variable "cloudflare_zone_id" {
+  description = "ID de la zona DNS de Cloudflare"
+  type        = string
+}
+
+variable "cloudflare_hostname" {
+  description = "Hostname público de la API, por ejemplo api.example.com"
+  type        = string
 }
 
 

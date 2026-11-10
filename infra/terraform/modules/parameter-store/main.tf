@@ -6,11 +6,12 @@ data "aws_region" "current" {}
 
 locals {
   parameter_names = {
-    DB_URL            = "/${var.project_name}/prod/DB_URL"
-    DB_USERNAME       = "/${var.project_name}/prod/DB_USERNAME"
-    DB_PASSWORD       = "/${var.project_name}/prod/DB_PASSWORD"
-    JWT_SECRET        = "/${var.project_name}/prod/JWT_SECRET"
-    JWT_EXPIRATION_MS = "/${var.project_name}/prod/JWT_EXPIRATION_MS"
+    DB_URL                  = "/${var.project_name}/prod/DB_URL"
+    DB_USERNAME             = "/${var.project_name}/prod/DB_USERNAME"
+    DB_PASSWORD             = "/${var.project_name}/prod/DB_PASSWORD"
+    JWT_SECRET              = "/${var.project_name}/prod/JWT_SECRET"
+    JWT_EXPIRATION_MS       = "/${var.project_name}/prod/JWT_EXPIRATION_MS"
+    CLOUDFLARE_TUNNEL_TOKEN = "/${var.project_name}/prod/CLOUDFLARE_TUNNEL_TOKEN"
   }
 
   parameter_arns = {

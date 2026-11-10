@@ -1,5 +1,10 @@
 aws_region   = "us-east-1"
 project_name = "curso-api"
 instance_type = "t3.micro"
+ami_id        = "ami-xxxxxxxxxxxxxxxxx"
 key_name     = "TU_KEY_PAIR"
 admin_cidr   = "TU_IP_PUBLICA/32"
+
+cloudflare_account_id = "TU_CLOUDFLARE_ACCOUNT_ID"
+cloudflare_zone_id    = "TU_CLOUDFLARE_ZONE_ID"
+cloudflare_hostname   = "api.tudominio.com"
