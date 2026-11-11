@@ -20,7 +20,7 @@ COMMANDS=$(jq -n \
   --arg region "$AWS_REGION" \
   --arg repository "$ECR_REPOSITORY_URL" \
   --arg tag "$IMAGE_TAG" \
-  '[
+  '{commands: [
     # Si un comando falla, SSM marcará el despliegue como fallido.
     "set -e",
 
@@ -28,17 +28,17 @@ COMMANDS=$(jq -n \
     "cd /opt/curso-api",
 
     # La instancia usa su IAM Role para autenticarse contra ECR.
-    ("aws ecr get-login-password --region " + $region + " | docker login --username AWS --password-stdin " + $repository | @sh),
+    ("aws ecr get-login-password --region " + $region + " | docker login --username AWS --password-stdin " + $repository),
 
     # Descarga solamente la imagen versionada de la API.
-    ("IMAGE_TAG=" + $tag + " ECR_REPOSITORY_URL=" + $repository + " docker compose --profile production --env-file /opt/curso-api/.env.prod -f /opt/curso-api/docker-compose.yml pull api" | @sh),
+    ("IMAGE_TAG=" + $tag + " ECR_REPOSITORY_URL=" + $repository + " docker compose --profile production --env-file /opt/curso-api/.env.prod -f /opt/curso-api/docker-compose.yml pull api"),
 
     # Reemplaza solo api. PostgreSQL y Cloudflare Tunnel permanecen activos.
-    ("IMAGE_TAG=" + $tag + " ECR_REPOSITORY_URL=" + $repository + " docker compose --profile production --env-file /opt/curso-api/.env.prod -f /opt/curso-api/docker-compose.yml up -d --no-build --no-deps api" | @sh),
+    ("IMAGE_TAG=" + $tag + " ECR_REPOSITORY_URL=" + $repository + " docker compose --profile production --env-file /opt/curso-api/.env.prod -f /opt/curso-api/docker-compose.yml up -d --no-build --no-deps api"),
 
     # Limpia imágenes antiguas que tengan más de siete días.
     "docker image prune -af --filter until=168h"
-  ]')
+  ]}')
 
 # Envía el script remoto a la instancia mediante Systems Manager.
 COMMAND_ID=$(aws ssm send-command \
