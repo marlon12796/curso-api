@@ -62,16 +62,24 @@ jobs:
         env:
           IMAGE_TAG: ${{ inputs.release_tag || github.ref_name }}
         run: |
-          if aws ecr describe-images \
+          set +e
+          ERROR_OUTPUT=$(aws ecr describe-images \
             --repository-name "$ECR_REPOSITORY" \
             --image-ids "imageTag=$IMAGE_TAG" \
             --region "$AWS_REGION" \
-            > /dev/null 2>&1; then
+            2>&1)
+          STATUS=$?
+          set -e
+
+          if [ "$STATUS" -eq 0 ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
             echo "La imagen $IMAGE_TAG ya existe; se reutilizará."
-          else
+          elif echo "$ERROR_OUTPUT" | grep -q "ImageNotFoundException"; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
             echo "La imagen $IMAGE_TAG no existe; se construirá."
+          else
+            echo "$ERROR_OUTPUT"
+            exit "$STATUS"
           fi
 
       - name: Build and push release image

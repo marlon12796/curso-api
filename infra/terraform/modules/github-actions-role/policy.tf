@@ -7,7 +7,8 @@ data "aws_iam_policy_document" "permissions" {
       "ecr:CompleteLayerUpload",
       "ecr:InitiateLayerUpload",
       "ecr:PutImage",
-      "ecr:UploadLayerPart"
+      "ecr:UploadLayerPart",
+      "ecr:DescribeImages"
     ]
     resources = [var.ecr_repository_arn]
   }
