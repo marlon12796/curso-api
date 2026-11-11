@@ -5,7 +5,10 @@ import com.marlon.curso_api.courses.application.CreateCourseCommand;
 import com.marlon.curso_api.courses.application.CreateCourseHandler;
 import com.marlon.curso_api.courses.application.GetAllCoursesQueryHandler;
 import com.marlon.curso_api.courses.domain.CourseStatus;
+import com.marlon.curso_api.shared.infraestructure.http.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,9 +40,18 @@ public class CourseController {
   @Operation(summary = "Crear un curso")
   @ApiResponses({
     @ApiResponse(responseCode = "201", description = "Curso creado correctamente"),
-    @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-    @ApiResponse(responseCode = "401", description = "No autenticado"),
-    @ApiResponse(responseCode = "403", description = "No tienes permisos de administrador")
+    @ApiResponse(
+        responseCode = "400",
+        description = "Datos inválidos",
+        content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "No autenticado",
+        content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "403",
+        description = "No tienes permisos de administrador",
+        content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
   })
   @SecurityRequirement(name = "bearerAuth")
   @PostMapping
