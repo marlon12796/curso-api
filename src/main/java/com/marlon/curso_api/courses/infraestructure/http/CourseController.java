@@ -4,6 +4,7 @@ import com.marlon.curso_api.courses.application.CourseResponse;
 import com.marlon.curso_api.courses.application.CreateCourseCommand;
 import com.marlon.curso_api.courses.application.CreateCourseHandler;
 import com.marlon.curso_api.courses.application.GetAllCoursesQueryHandler;
+import com.marlon.curso_api.courses.domain.CourseStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -54,5 +55,12 @@ public class CourseController {
   public ResponseEntity<List<CourseResponse>> getAll() {
     List<CourseResponse> response = getAllCoursesQueryHandler.handle();
     return ResponseEntity.ok(response);
+  }
+
+  @Operation(summary = "Consultar estados válidos de cursos")
+  @ApiResponse(responseCode = "200", description = "Estados de cursos disponibles")
+  @GetMapping("/statuses")
+  public ResponseEntity<List<CourseStatus>> getStatuses() {
+    return ResponseEntity.ok(List.of(CourseStatus.values()));
   }
 }
