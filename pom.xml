@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.marlon</groupId>
 	<artifactId>curso-api</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<name>curso-api</name>
 	<description/>
 	<url/>
