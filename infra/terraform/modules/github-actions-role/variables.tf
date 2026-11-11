@@ -8,6 +8,16 @@ variable "github_repository" {
   type        = string
 }
 
+variable "github_owner_id" {
+  description = "ID numérico del propietario del repositorio en GitHub"
+  type        = string
+}
+
+variable "github_repository_id" {
+  description = "ID numérico del repositorio en GitHub"
+  type        = string
+}
+
 variable "github_branch" {
   description = "Rama autorizada para asumir el role"
   type        = string

@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class CursoApiApplication {
 
+  // Punto de entrada de la API Curso API.
   public static void main(String[] args) {
     SpringApplication.run(CursoApiApplication.class, args);
   }
