@@ -1,3 +1,5 @@
+data "aws_partition" "current" {}
+
 data "aws_iam_policy_document" "ec2_assume_role" {
   statement {
     effect = "Allow"
@@ -26,4 +28,9 @@ resource "aws_iam_instance_profile" "this" {
       Name = "${var.name}-profile"
     }
   )
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
+  role       = aws_iam_role.this.name
+  policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }

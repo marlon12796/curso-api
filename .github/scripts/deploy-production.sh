@@ -35,6 +35,7 @@ COMMANDS=$(jq -n \
 
     # Reemplaza solo api. PostgreSQL y Cloudflare Tunnel permanecen activos.
     ("IMAGE_TAG=" + $tag + " ECR_REPOSITORY_URL=" + $repository + " docker compose --profile production --env-file /opt/curso-api/.env.prod -f /opt/curso-api/docker-compose.yml up -d --no-build --no-deps api"),
+    "curl --fail --silent --show-error --retry 12 --retry-delay 5 --retry-connrefused http://localhost:3050/courses > /dev/null",
 
     # Limpia imágenes antiguas que tengan más de siete días.
     "docker image prune -af --filter until=168h"

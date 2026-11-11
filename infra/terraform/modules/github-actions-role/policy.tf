@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "permissions" {
     ]
     resources = [
       var.instance_arn,
-      "arn:${data.aws_partition.current.partition}:ssm:*:${data.aws_caller_identity.current.account_id}:document/AWS-RunShellScript"
+      "arn:${data.aws_partition.current.partition}:ssm:*::document/AWS-RunShellScript"
     ]
   }
 
