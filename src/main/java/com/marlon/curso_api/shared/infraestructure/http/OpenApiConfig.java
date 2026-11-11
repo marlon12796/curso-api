@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -12,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
         @Info(
             title = "Curso API",
             version = "v1",
-            description = "API de cursos con autenticacion JWT y despliegue automatizado"))
+            description = "API de cursos con autenticacion JWT y despliegue automatizado"),
+    servers = {@Server(url = "https://java.marloncloud.com", description = "Produccion")})
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
