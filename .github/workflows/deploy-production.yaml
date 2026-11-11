@@ -57,7 +57,25 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Check whether release image already exists
+        id: image
+        env:
+          IMAGE_TAG: ${{ inputs.release_tag || github.ref_name }}
+        run: |
+          if aws ecr describe-images \
+            --repository-name "$ECR_REPOSITORY" \
+            --image-ids "imageTag=$IMAGE_TAG" \
+            --region "$AWS_REGION" \
+            > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "La imagen $IMAGE_TAG ya existe; se reutilizará."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "La imagen $IMAGE_TAG no existe; se construirá."
+          fi
+
       - name: Build and push release image
+        if: steps.image.outputs.exists != 'true'
         env:
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           IMAGE_TAG: ${{ inputs.release_tag || github.ref_name }}
