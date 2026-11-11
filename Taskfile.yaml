@@ -36,6 +36,15 @@ tasks:
     cmds:
       - cmd: cmd /c mvnw.cmd spotless:check
 
+  trigger-workflow:
+    desc: "Simula localmente el evento pull_request de GitHub Actions con act"
+    cmds:
+      - cmd: >-
+          act pull_request
+          --container-architecture linux/amd64
+          -P ubuntu-latest=catthehacker/ubuntu:act-22.04
+          -W .github/workflows/test.yaml
+
   lint:
     desc: "Ejecuta Checkstyle"
     cmds:

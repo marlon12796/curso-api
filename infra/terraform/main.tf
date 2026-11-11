@@ -147,3 +147,17 @@ module "ec2_ssm_role" {
     Project = var.project_name
   }
 }
+
+module "github_actions_role" {
+  source = "./modules/github-actions-role"
+
+  name               = var.project_name
+  github_repository  = "marlon12796/curso-api"
+  github_branch      = "master"
+  ecr_repository_arn = module.ecr.repository_arn
+  instance_arn       = "arn:${data.aws_partition.current.partition}:ec2:${var.aws_region}:${data.aws_caller_identity.current.account_id}:instance/${module.ec2.id}"
+
+  tags = {
+    Project = var.project_name
+  }
+}

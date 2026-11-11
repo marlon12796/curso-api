@@ -12,3 +12,8 @@ output "ecr_repository_url" {
   description = "URL del repositorio ECR de la API"
   value       = module.ecr.repository_url
 }
+
+output "github_actions_role_arn" {
+  description = "ARN del IAM Role que usará GitHub Actions"
+  value       = module.github_actions_role.role_arn
+}

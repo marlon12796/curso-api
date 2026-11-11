@@ -1,0 +1,23 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "maven",
+      "package-name": "com.marlon:curso-api",
+      "include-component-in-tag": false
+    }
+  },
+  "changelog-sections": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "perf",
+      "section": "Performance"
+    }
+  ]
+}
