@@ -102,4 +102,13 @@ jobs:
           bash .github/scripts/deploy-production.sh
 
       - name: Smoke test
-        run: curl --fail --silent --show-error https://java.marloncloud.com/courses > /dev/null
+        run: |
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --retry 12 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            https://java.marloncloud.com/courses \
+            > /dev/null
