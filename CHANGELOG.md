@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0](https://github.com/marlon12796/curso-api/compare/v1.0.0...v1.1.0) (2026-11-11)
+
+
+### Features
+
+* add course status catalog endpoint ([a0d4038](https://github.com/marlon12796/curso-api/commit/a0d40386c09ef1f9fd25eb41aa40e2a9e5175f3a))
+* add course status catalog endpoint ([246c4d7](https://github.com/marlon12796/curso-api/commit/246c4d7e2f48ffa34945ad228704b8eac9ef0e4c))
+
+
+### Bug Fixes
+
+* avoid overwriting immutable ECR tags ([a2e0a88](https://github.com/marlon12796/curso-api/commit/a2e0a882f41caa1453edd38fb3437f9b2593407a))
+* avoid overwriting immutable ECR tags ([64ea567](https://github.com/marlon12796/curso-api/commit/64ea5676305cdbe0a9b7e4ef8ee61cd2873e8012))
+* check immutable ECR image safely ([183e85f](https://github.com/marlon12796/curso-api/commit/183e85fe4413e650f53051bbf14004b6c902f6da))
+* check immutable ECR image safely ([02598dc](https://github.com/marlon12796/curso-api/commit/02598dc3c3985ffd36d91151e2f5ba300458673b))
+* correct SSM deployment parameters ([0c40966](https://github.com/marlon12796/curso-api/commit/0c40966ecbd94f9ec82b2ffb765697ac1c45de80))
+* correct SSM deployment parameters ([6c2da3d](https://github.com/marlon12796/curso-api/commit/6c2da3d67eff8220f03765805e606ca5f1457735))
+* document public course listing in OpenAPI ([222bc68](https://github.com/marlon12796/curso-api/commit/222bc684e61c829015fd9a967527cb7b66d66f33))
+* document public course listing in OpenAPI ([cb1f4c8](https://github.com/marlon12796/curso-api/commit/cb1f4c83c0af4aa73e8faf6d5b7165c8f4cc9c9f))
+
 ## 1.0.0 (2026-11-11)
 
 
