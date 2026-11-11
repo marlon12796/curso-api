@@ -3,6 +3,7 @@
     ".": {
       "release-type": "maven",
       "package-name": "com.marlon:curso-api",
+      "component": "curso-api",
       "include-component-in-tag": false
     }
   },
