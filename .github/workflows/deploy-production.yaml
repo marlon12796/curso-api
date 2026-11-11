@@ -9,13 +9,24 @@ permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: curso-api
 
 jobs:
+  test-release:
+    name: Test release before deployment
+    uses: ./.github/workflows/reusable-test.yaml
+    permissions:
+      contents: read
+
   deploy:
     name: Build and deploy release
+    needs: test-release
     runs-on: ubuntu-latest
 
     steps:
