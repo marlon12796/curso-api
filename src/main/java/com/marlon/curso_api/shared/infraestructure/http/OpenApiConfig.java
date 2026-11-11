@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
         @Info(
             title = "Curso API",
             version = "v1",
-            description = "API de cursos con autenticación JWT"))
+            description = "API de cursos con autenticacion JWT y despliegue automatizado"))
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
