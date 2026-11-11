@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/courses") // La URL final será /api/v1/courses
+@RequestMapping("/courses")
 public class CourseController {
   private final CreateCourseHandler createCourseHandler;
   private final GetAllCoursesQueryHandler getAllCoursesQueryHandler;
@@ -48,7 +48,8 @@ public class CourseController {
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
-  // 2. GET: Despacha al Query Handler y devuelve HTTP 200 OK con la lista
+  @Operation(summary = "Listar cursos públicos")
+  @ApiResponse(responseCode = "200", description = "Cursos listados correctamente")
   @GetMapping
   public ResponseEntity<List<CourseResponse>> getAll() {
     List<CourseResponse> response = getAllCoursesQueryHandler.handle();
